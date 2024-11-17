@@ -587,6 +587,17 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pyfiglet"
+version = "1.0.2"
+description = "Pure-python FIGlet implementation"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "pyfiglet-1.0.2-py3-none-any.whl", hash = "sha256:889b351d79c99e50a3f619c8f8e6ffdb27fd8c939fc43ecbd7559bd57d5f93ea"},
+    {file = "pyfiglet-1.0.2.tar.gz", hash = "sha256:758788018ab8faaddc0984e1ea05ff330d3c64be663c513cc1f105f6a3066dab"},
+]
+
+[[package]]
 name = "python-decouple"
 version = "3.8"
 description = "Strict separation of settings from code."
@@ -752,4 +763,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "b6af587df30d958e3611611279d95607469292d7b5a022950675127ba852b413"
+content-hash = "191c1b32f59f7d8502c52f86eb7b5f0db3d92b48a90dd451e5e2c6098e14e12c"
