@@ -52,7 +52,9 @@ async def run_migrations_online():
     async with get_engine().connect() as connection:
         await connection.run_sync(
             lambda sync_conn: context.configure(
-                connection=sync_conn, target_metadata=target_metadata, transaction_per_migration=True
+                connection=sync_conn,
+                target_metadata=target_metadata,
+                transaction_per_migration=True,
             )
         )
         async with connection.begin():
@@ -63,4 +65,5 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     import asyncio
+
     asyncio.run(run_migrations_online())
