@@ -3,6 +3,8 @@ from alembic import context
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy import pool
 
+from src.domain.models.orm_base.model import Base
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -50,10 +52,10 @@ async def run_migrations_online():
     async with get_engine().connect() as connection:
         await connection.run_sync(
             lambda sync_conn: context.configure(
-                connection=sync_conn, target_metadata=target_metadata
+                connection=sync_conn, target_metadata=target_metadata, transaction_per_migration=True
             )
         )
-        async with context.begin_transaction():
+        async with connection.begin():
             await connection.run_sync(context.run_migrations)
 
 
@@ -61,5 +63,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     import asyncio
-
     asyncio.run(run_migrations_online())
