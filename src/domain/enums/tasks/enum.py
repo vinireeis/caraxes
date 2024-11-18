@@ -1,9 +1,14 @@
 from enum import StrEnum
 
 
-class ProjectStatus(StrEnum):
-    PLANNING = "PLANNING"
-    ACTIVE = "ACTIVE"
+class TaskStatus(StrEnum):
+    TODO = "TODO"
+    IN_PROGRESS = "IN_PROGRESS"
+    DONE = "DONE"
     BLOCKED = "BLOCKED"
-    COMPLETED = "COMPLETED"
-    CANCELLED = "CANCELLED"
+
+
+class TaskPriority(StrEnum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"

@@ -6,24 +6,23 @@ from src.externals.routers.users.router import UsersRouter
 
 
 class ApiInfrastructure:
-    __root_path = config("ROOT_PATH")
+    __root_path: str = config("ROOT_PATH")
+    __app: FastAPI = None
 
     @classmethod
     def get_app(cls):
-        app = FastAPI(
-            title="Caraxes API",
-            description="Projects and tasks management",
-            docs_url=cls.__root_path + "/docs",
-            openapi_url=cls.__root_path + "/openapi.json",
-        )
-
-        cls.__register_routers()
-
-        return app
+        if cls.__app is None:
+            cls.__app = FastAPI(
+                title="Caraxes API",
+                description="Projects and tasks management",
+                docs_url=f"{cls.__root_path}/docs",
+                openapi_url=f"{cls.__root_path}/openapi.json",
+            )
+        cls.register_routers(app=cls.__app)
+        return cls.__app
 
     @classmethod
-    def __register_routers(cls):
-        app = cls.get_app()
+    def register_routers(cls, app: FastAPI):
         cls.__include_users_router(app=app)
 
     @staticmethod

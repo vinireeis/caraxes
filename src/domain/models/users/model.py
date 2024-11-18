@@ -1,11 +1,9 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import List, Optional
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.domain.models.orm_base.model import Base
-from src.domain.models.projects.model import ProjectModel
-from src.domain.models.tasks.model import TaskModel
 
 
 class UserModel(Base):
@@ -14,11 +12,10 @@ class UserModel(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(100), unique=True)
-    phone: Mapped[Optional[str]] = mapped_column(String(20))
-    role: Mapped[str] = mapped_column(String(20))
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    role: Mapped[Optional[str]] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow, onupdate=datetime.utcnow
+        default=datetime.now(UTC), onupdate=datetime.now(UTC)
     )
 
     projects: Mapped[List["ProjectModel"]] = relationship(back_populates="user")

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from src.domain.enums.http_response.internal_code import InternalCode
+from src.domain.enums.http_response.enum import InternalCode
 from src.domain.exceptions.base.exception import RepositoryException
 
 

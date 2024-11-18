@@ -1,13 +1,14 @@
 from http import HTTPStatus
 
+from decouple import config
 from fastapi import APIRouter, Response
 
-from src.domain.enums.http_response.internal_code import InternalCode
+from src.domain.enums.http_response.enum import InternalCode
 from src.domain.models.http_response.model import ResponseModel
 
 
 class UsersRouter:
-    __router = APIRouter(prefix="/api/v1", tags=["Partners Loader"])
+    __router = APIRouter(prefix=config("ROOT_PATH"), tags=["Users"])
 
     @staticmethod
     def get_users_router():
