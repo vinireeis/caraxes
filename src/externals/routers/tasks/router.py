@@ -1,6 +1,8 @@
 from typing import Annotated
 from decouple import config
 from fastapi import APIRouter, Query
+
+from src.adapters.controllers.caraxes_controller import CaraxesController
 from src.adapters.data_types.requests.tasks_request import (
     NewTaskRequest,
     UpdateTaskRequest,
@@ -14,7 +16,6 @@ from src.adapters.data_types.responses.tasks_response import (
     UpdateTaskResponse,
     UpdateTaskStatusResponse,
 )
-from src.services.tasks.service import TaskService
 
 
 class TasksRouter:
@@ -32,9 +33,10 @@ class TasksRouter:
         project_id: Annotated[int | None, Query(default=None)],
         user_id: Annotated[int | None, Query(default=None)],
     ) -> TasksPaginatedResponse:
-        response = await TaskService.get_tasks_paginated(
+        response = await CaraxesController.get_tasks_paginated(
             limit=limit, offset=offset, project_id=project_id, user_id=user_id
         )
+
         return response
 
     @staticmethod
@@ -42,9 +44,10 @@ class TasksRouter:
         path="/projects/{project_id}/tasks/{task_id}", response_model=GetOneTaskResponse
     )
     async def get_one_task(project_id: int, task_id: int) -> GetOneTaskResponse:
-        response = await TaskService.get_task_by_id(
+        response = await CaraxesController.get_task_by_id(
             project_id=project_id, task_id=task_id
         )
+
         return response
 
     @staticmethod
@@ -52,9 +55,10 @@ class TasksRouter:
     async def create_new_task(
         project_id: int, request: NewTaskRequest
     ) -> NewTaskResponse:
-        response = await TaskService.create_new_task(
+        response = await CaraxesController.create_new_task(
             project_id=project_id, request=request
         )
+
         return response
 
     @staticmethod
@@ -64,9 +68,10 @@ class TasksRouter:
     async def update_task(
         project_id: int, task_id: int, request: UpdateTaskRequest
     ) -> UpdateTaskResponse:
-        response = await TaskService.update_task(
+        response = await CaraxesController.update_task(
             project_id=project_id, task_id=task_id, request=request
         )
+
         return response
 
     @staticmethod
@@ -77,9 +82,10 @@ class TasksRouter:
     async def update_task_status(
         project_id: int, task_id: int, request: UpdateTaskStatusRequest
     ) -> UpdateTaskStatusResponse:
-        response = await TaskService.update_task_status(
+        response = await CaraxesController.update_task_status(
             project_id=project_id, task_id=task_id, request=request
         )
+
         return response
 
     @staticmethod
@@ -87,5 +93,8 @@ class TasksRouter:
         path="/projects/{project_id}/tasks/{task_id}", response_model=DeleteTaskResponse
     )
     async def delete_task(project_id: int, task_id: int) -> DeleteTaskResponse:
-        response = await TaskService.delete_task(project_id=project_id, task_id=task_id)
+        response = await CaraxesController.delete_task(
+            project_id=project_id, task_id=task_id
+        )
+
         return response

@@ -3,6 +3,7 @@ from typing import Annotated
 from decouple import config
 from fastapi import APIRouter, Query
 
+from src.adapters.controllers.caraxes_controller import CaraxesController
 from src.adapters.data_types.requests.users_request import (
     NewUserRequest,
     UpdateUserRequest,
@@ -14,7 +15,6 @@ from src.adapters.data_types.responses.users_response import (
     DeleteUserResponse,
     UpdateUserResponse,
 )
-from src.services.users.service import UserService
 
 
 class UsersRouter:
@@ -30,21 +30,23 @@ class UsersRouter:
         limit: Annotated[int, Query(default=10, ge=1)],
         offset: Annotated[int, Query(default=0, ge=0)],
     ) -> UsersPaginatedResponse:
-        response = await UserService.get_users_paginated(limit=limit, offset=offset)
+        response = await CaraxesController.get_users_paginated(
+            limit=limit, offset=offset
+        )
 
         return response
 
     @staticmethod
     @__router.get(path="/users/{user_id}", response_model=GetOneUserResponse)
     async def get_one_user(user_id: int) -> GetOneUserResponse:
-        response = await UserService.get_user_by_id(user_id=user_id)
+        response = await CaraxesController.get_user_by_id(user_id=user_id)
 
         return response
 
     @staticmethod
     @__router.post(path="/users", response_model=NewUserResponse)
     async def create_new_user(request: NewUserRequest) -> NewUserResponse:
-        response = await UserService.create_new_user(
+        response = await CaraxesController.create_new_user(
             request=request,
         )
 
@@ -55,13 +57,15 @@ class UsersRouter:
     async def update_user(
         user_id: int, request: UpdateUserRequest
     ) -> UpdateUserResponse:
-        response = await UserService.update_user_by_id(user_id=user_id, request=request)
+        response = await CaraxesController.update_user_by_id(
+            user_id=user_id, request=request
+        )
 
         return response
 
     @staticmethod
     @__router.delete(path="/users/{user_id}", response_model=DeleteUserResponse)
     async def delete_user(user_id: int) -> DeleteUserResponse:
-        response = await UserService.delete_user_by_id(user_id=user_id)
+        response = await CaraxesController.delete_user_by_id(user_id=user_id)
 
         return response

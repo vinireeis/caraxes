@@ -1,6 +1,8 @@
 from typing import Annotated
 from decouple import config
 from fastapi import APIRouter, Query
+
+from src.adapters.controllers.caraxes_controller import CaraxesController
 from src.domain.enums.projects.enum import ProjectStatusEnum
 from src.adapters.data_types.requests.projects_request import (
     NewProjectRequest,
@@ -13,7 +15,6 @@ from src.adapters.data_types.responses.projects_response import (
     DeleteProjectResponse,
     UpdateProjectResponse,
 )
-from src.services.projects.service import ProjectService
 
 
 class ProjectsRouter:
@@ -26,7 +27,7 @@ class ProjectsRouter:
     @staticmethod
     @__router.post(path="/projects", response_model=NewProjectResponse)
     async def create_new_project(request: NewProjectRequest) -> NewProjectResponse:
-        response = await ProjectService.create_new_project(request=request)
+        response = await CaraxesController.create_new_project(request=request)
         return response
 
     @staticmethod
@@ -37,7 +38,7 @@ class ProjectsRouter:
         status: Annotated[ProjectStatusEnum | None, Query(default=None)],
         user_id: Annotated[int | None, Query(default=None)],
     ) -> ProjectsPaginatedResponse:
-        response = await ProjectService.get_projects_paginated(
+        response = await CaraxesController.get_projects_paginated(
             limit=limit, offset=offset, status=status, user_id=user_id
         )
         return response
@@ -45,7 +46,7 @@ class ProjectsRouter:
     @staticmethod
     @__router.get(path="/projects/{project_id}", response_model=GetOneProjectResponse)
     async def get_one_project(project_id: int) -> GetOneProjectResponse:
-        response = await ProjectService.get_project_by_id(project_id=project_id)
+        response = await CaraxesController.get_project_by_id(project_id=project_id)
         return response
 
     @staticmethod
@@ -53,7 +54,7 @@ class ProjectsRouter:
     async def update_project(
         project_id: int, request: UpdateProjectRequest
     ) -> UpdateProjectResponse:
-        response = await ProjectService.update_project(
+        response = await CaraxesController.update_project(
             project_id=project_id, request=request
         )
         return response
@@ -63,5 +64,5 @@ class ProjectsRouter:
         path="/projects/{project_id}", response_model=DeleteProjectResponse
     )
     async def delete_project(project_id: int) -> DeleteProjectResponse:
-        response = await ProjectService.delete_project_by_id(project_id=project_id)
+        response = await CaraxesController.delete_project(project_id=project_id)
         return response

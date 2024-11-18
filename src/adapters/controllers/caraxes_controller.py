@@ -44,6 +44,7 @@ from src.adapters.data_types.responses.users_response import (
     UpdateUserResponse,
     DeleteUserResponse,
 )
+from src.domain.enums.projects.enum import ProjectStatusEnum
 from src.services.projects.service import ProjectService
 from src.services.tasks.service import TaskService
 from src.services.users.service import UserService
@@ -174,10 +175,10 @@ class CaraxesController:
 
     @classmethod
     async def get_projects_paginated(
-        cls, limit: int, offset: int
+        cls, limit: int, offset: int, status: ProjectStatusEnum, user_id: int
     ) -> ProjectsPaginatedResponse:
         projects_result = await ProjectService.get_projects_paginated(
-            limit=limit, offset=offset
+            limit=limit, offset=offset, status=status, user_id=user_id
         )
         projects_payload_list = [
             ProjectPayload(
