@@ -1,5 +1,6 @@
 from typing import AsyncGenerator
 
+import loglifos
 from decouple import config
 from sqlalchemy import AsyncAdaptedQueuePool
 from sqlalchemy.exc import SQLAlchemyError
@@ -28,6 +29,8 @@ class PostgresInfrastructure:
             async with cls.async_session() as session:
                 yield session
         except SQLAlchemyError as ex:
-            raise SqlAlchemyInfrastructureException(original_ex=ex)
+            loglifos.info(msg=str(ex))
+            raise SqlAlchemyInfrastructureException()
         except Exception as ex:
-            raise UnexpectedInfrastructureException(original_ex=ex)
+            loglifos.info(msg=str(ex))
+            raise UnexpectedInfrastructureException()

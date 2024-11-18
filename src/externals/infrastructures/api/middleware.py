@@ -3,23 +3,24 @@ from time import time
 
 import loglifos
 from fastapi import Request, Response
+from pydantic import ValidationError
 
-from src.domain.enums.http_response.enum import InternalCode
+from src.adapters.data_types.responses.base.error_response import ErrorResponse
+from src.domain.enums.http_response.enum import InternalCodeEnum
 from src.domain.exceptions.base.exception import (
     InfrastructureException,
     RepositoryException,
 )
 from src.domain.exceptions.domain.exception import DomainException
 from src.domain.exceptions.service.exception import ServiceException
-from src.domain.models.http_response.model import ResponseModel
 from src.externals.infrastructures.api.infrastructure import ApiInfrastructure
 
 
 class Middleware:
-    app = ApiInfrastructure.get_app()
+    __app = ApiInfrastructure.get_app()
 
     @classmethod
-    @app.middleware("http")
+    @__app.middleware("http")
     async def process_request(cls, request: Request, call_next: callable) -> Response:
         start_time = time()
         response = await cls.__response_handler(request=request, call_next=call_next)
@@ -34,35 +35,35 @@ class Middleware:
         try:
             response = await call_next(request)
 
-        except DomainException as ex:
+        except (
+            DomainException,
+            ServiceException,
+            RepositoryException,
+            InfrastructureException,
+        ) as ex:
             loglifos.info(msg=ex.msg)
-            response = ResponseModel(
-                success=False, message=ex.msg, internal_code=ex.internal_code
-            ).build_http_response(status_code=ex.status_code)
+            response = ErrorResponse(
+                success=False,
+                message=ex.msg,
+                internal_code=ex.internal_code,
+                status_code=ex.status_code,
+            )
 
-        except ServiceException as ex:
-            loglifos.info(msg=ex.msg)
-            response = ResponseModel(
-                success=False, message=ex.msg, internal_code=ex.internal_code
-            ).build_http_response(status_code=ex.status_code)
-
-        except RepositoryException as ex:
-            loglifos.info(msg=ex.msg)
-            response = ResponseModel(
-                success=False, message=ex.msg, internal_code=ex.internal_code
-            ).build_http_response(status_code=ex.status_code)
-
-        except InfrastructureException as ex:
-            loglifos.info(msg=ex.original_ex)
-            response = ResponseModel(
-                success=False, message=ex.msg, internal_code=ex.internal_code
-            ).build_http_response(status_code=ex.status_code)
+        except ValidationError as ex:
+            loglifos.error(exception=ex, msg=str(ex))
+            response = ErrorResponse(
+                success=False,
+                internal_code=InternalCodeEnum.DATA_VALIDATION_ERROR,
+                status_code=HTTPStatus.BAD_REQUEST,
+            )
 
         except Exception as ex:
             loglifos.error(exception=ex, msg=str(ex))
-            response = ResponseModel(
-                success=False, internal_code=InternalCode.INTERNAL_SERVER_ERROR
-            ).build_http_response(status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
+            response = ErrorResponse(
+                success=False,
+                internal_code=InternalCodeEnum.INTERNAL_SERVER_ERROR,
+                status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
 
         finally:
             return response
