@@ -14,7 +14,7 @@ from src.domain.exceptions.infrastructure.exception import (
 
 class PostgresInfrastructure:
     async_engine = create_async_engine(
-        config("POSTGRES_URL"),
+        config("POSTGRES_STRING_CONNECTION"),
         echo=True,
         poolclass=AsyncAdaptedQueuePool,
         pool_pre_ping=True,
