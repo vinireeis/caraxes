@@ -1,14 +1,14 @@
 from http import HTTPStatus
 
-from src.domain.enums.http_response.enum import InternalCode
+from src.domain.enums.http_response.enum import InternalCodeEnum
 from src.domain.exceptions.base.exception import RepositoryException
 
 
-class Base64DecodeError(RepositoryException):
-    def __init__(self, *args, **kwargs):
-        self.msg = "Error to decode Base64"
-        self.status_code = HTTPStatus.BAD_REQUEST
-        self.internal_code = InternalCode.DATA_DECODER_ERROR
+class UserNotFoundError(RepositoryException):
+    def __init__(self, user_id, *args, **kwargs):
+        self.msg = f"User with ID {user_id} not found."
+        self.status_code = HTTPStatus.NOT_FOUND
+        self.internal_code = InternalCodeEnum.DATA_NOT_FOUND
         self.success = False
         super().__init__(
             self.msg,
@@ -16,5 +16,53 @@ class Base64DecodeError(RepositoryException):
             self.internal_code,
             self.success,
             *args,
-            **kwargs
+            **kwargs,
+        )
+
+
+class EmailAlreadyExists(RepositoryException):
+    def __init__(self, *args, **kwargs):
+        self.msg = f"User with this email already exists."
+        self.status_code = HTTPStatus.UNPROCESSABLE_ENTITY
+        self.internal_code = InternalCodeEnum.DATA_ALREADY_EXISTS
+        self.success = False
+        super().__init__(
+            self.msg,
+            self.status_code,
+            self.internal_code,
+            self.success,
+            *args,
+            **kwargs,
+        )
+
+
+class ProjectNotFoundError(RepositoryException):
+    def __init__(self, project_id, *args, **kwargs):
+        self.msg = f"Project with ID {project_id} not found."
+        self.status_code = HTTPStatus.NOT_FOUND
+        self.internal_code = InternalCodeEnum.DATA_NOT_FOUND
+        self.success = False
+        super().__init__(
+            self.msg,
+            self.status_code,
+            self.internal_code,
+            self.success,
+            *args,
+            **kwargs,
+        )
+
+
+class TaskNotFoundError(RepositoryException):
+    def __init__(self, task_id, *args, **kwargs):
+        self.msg = f"Task with ID {task_id} not found."
+        self.status_code = HTTPStatus.NOT_FOUND
+        self.internal_code = InternalCodeEnum.DATA_NOT_FOUND
+        self.success = False
+        super().__init__(
+            self.msg,
+            self.status_code,
+            self.internal_code,
+            self.success,
+            *args,
+            **kwargs,
         )

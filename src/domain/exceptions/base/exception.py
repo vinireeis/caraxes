@@ -1,4 +1,4 @@
-from src.domain.enums.http_response.enum import InternalCode
+from src.domain.enums.http_response.enum import InternalCodeEnum
 
 
 class BaseCustomException(Exception):
@@ -6,7 +6,7 @@ class BaseCustomException(Exception):
         self,
         msg: str,
         status_code: int,
-        internal_code: InternalCode,
+        internal_code: InternalCodeEnum,
         success: bool,
         *args,
         **kwargs

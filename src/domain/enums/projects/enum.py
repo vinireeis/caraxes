@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ProjectStatus(StrEnum):
+class ProjectStatusEnum(StrEnum):
     PLANNING = "PLANNING"
     ACTIVE = "ACTIVE"
     PAUSED = "PAUSED"

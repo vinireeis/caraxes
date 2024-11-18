@@ -4,7 +4,7 @@ from typing import List, Optional
 from sqlalchemy import ForeignKey, String, Text, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.domain.enums.tasks.enum import TaskStatus, TaskPriority
+from src.domain.enums.tasks.enum import TaskStatusEnum, TaskPriorityEnum
 from src.domain.models.orm_base.model import Base
 
 
@@ -15,9 +15,9 @@ class TaskModel(Base):
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"))
     name: Mapped[str] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(Text)
-    status: Mapped[str] = mapped_column(Enum(TaskStatus))
+    status: Mapped[str] = mapped_column(Enum(TaskStatusEnum))
     priority: Mapped[str] = mapped_column(
-        Enum(TaskPriority), default=TaskPriority.MEDIUM
+        Enum(TaskPriorityEnum), default=TaskPriorityEnum.MEDIUM
     )
     deadline: Mapped[Optional[datetime]]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
