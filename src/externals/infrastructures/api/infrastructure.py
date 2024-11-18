@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from decouple import config
 
-from src.externals.routers.clients.router import ClientsRouter
+from src.externals.routers.users.router import UsersRouter
 
 
 class ApiInfrastructure:
@@ -24,9 +24,9 @@ class ApiInfrastructure:
     @classmethod
     def __register_routers(cls):
         app = cls.get_app()
-        cls.__include_clients_router(app=app)
+        cls.__include_users_router(app=app)
 
     @staticmethod
-    def __include_clients_router(app: FastAPI):
-        router = ClientsRouter.get_clients_router()
+    def __include_users_router(app: FastAPI):
+        router = UsersRouter.get_users_router()
         app.include_router(router)

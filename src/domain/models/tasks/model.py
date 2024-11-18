@@ -20,10 +20,15 @@ class TaskModel(Base):
     priority: Mapped[str] = mapped_column(String(20))
     deadline: Mapped[Optional[datetime]]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC), onupdate=datetime.now(UTC))
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now(UTC), onupdate=datetime.now(UTC)
+    )
 
     project: Mapped["ProjectModel"] = relationship(back_populates="tasks")
-    assigned_users: Mapped[List["UserModel"]] = relationship(secondary="task_assignments", back_populates="tasks")
+    assigned_users: Mapped[List["UserModel"]] = relationship(
+        secondary="task_assignments", back_populates="tasks"
+    )
+
 
 class TaskAssignmentModel(Base):
     __tablename__ = "task_assignments"

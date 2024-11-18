@@ -20,7 +20,9 @@ class ProjectModel(Base):
     start_date: Mapped[Optional[datetime]]
     end_date: Mapped[Optional[datetime]]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC), onupdate=datetime.now(UTC))
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now(UTC), onupdate=datetime.now(UTC)
+    )
 
     user: Mapped["UserModel"] = relationship(back_populates="projects")
     tasks: Mapped[List["TaskModel"]] = relationship(back_populates="project")
