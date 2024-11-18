@@ -1,4 +1,3 @@
-from typing import Annotated
 from decouple import config
 from fastapi import APIRouter, Query
 
@@ -28,10 +27,10 @@ class TasksRouter:
     @staticmethod
     @__router.get(path="/projects/tasks", response_model=TasksPaginatedResponse)
     async def get_tasks_paginated(
-        limit: Annotated[int, Query(default=10, ge=1)],
-        offset: Annotated[int, Query(default=0, ge=0)],
-        project_id: Annotated[int | None, Query(default=None)],
-        user_id: Annotated[int | None, Query(default=None)],
+        limit: int = Query(default=10, ge=1),
+        offset: int = Query(default=0, ge=0),
+        project_id: int | None = Query(default=None),
+        user_id: int | None = Query(default=None),
     ) -> TasksPaginatedResponse:
         response = await CaraxesController.get_tasks_paginated(
             limit=limit, offset=offset, project_id=project_id, user_id=user_id

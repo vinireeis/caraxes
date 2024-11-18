@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from decouple import config
 from fastapi import APIRouter, Query
 
@@ -27,8 +25,8 @@ class UsersRouter:
     @staticmethod
     @__router.get(path="/users", response_model=UsersPaginatedResponse)
     async def get_users_paginated(
-        limit: Annotated[int, Query(default=10, ge=1)],
-        offset: Annotated[int, Query(default=0, ge=0)],
+        limit: int = Query(default=10, ge=1),
+        offset: int = Query(default=0, ge=0),
     ) -> UsersPaginatedResponse:
         response = await CaraxesController.get_users_paginated(
             limit=limit, offset=offset
