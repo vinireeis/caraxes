@@ -1,19 +1,7 @@
-from http import HTTPStatus
-
 from src import ProjectModel
 from src.adapters.data_types.requests.projects_request import (
     NewProjectRequest,
     UpdateProjectRequest,
-)
-from src.adapters.data_types.responses.projects_response import (
-    NewProjectResponse,
-    ProjectIdPayload,
-    GetOneProjectResponse,
-    ProjectPayload,
-    ProjectsPaginatedResponse,
-    ProjectsPaginatedPayload,
-    DeleteProjectResponse,
-    UpdateProjectResponse,
 )
 from src.adapters.data_types.typed_dicts.projects_typed_dict import (
     PaginatedProjectsTypedDict,
@@ -28,21 +16,14 @@ class ProjectService:
     _user_service: UserService = UserService()
 
     @classmethod
-    async def create_new_project(cls, request: NewProjectRequest) -> NewProjectResponse:
+    async def create_new_project(cls, request: NewProjectRequest) -> ProjectModel:
         await cls.verify_user_exists(user_id=request.user.id)
 
         new_project_model = await cls._project_repository.insert_one_project(
             project_request=request
         )
 
-        new_project_response = NewProjectResponse(
-            payload=ProjectIdPayload(id=new_project_model.id),
-            success=True,
-            message="Project created successfully.",
-            status_code=HTTPStatus.CREATED,
-        )
-
-        return new_project_response
+        return new_project_model
 
     @classmethod
     async def get_project_by_id(cls, project_id: int) -> ProjectModel:

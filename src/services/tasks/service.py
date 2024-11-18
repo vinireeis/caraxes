@@ -1,6 +1,4 @@
 from asyncio import gather
-from http import HTTPStatus
-from sys import exception
 
 from src import TaskModel
 from src.adapters.data_types.requests.tasks_request import (
