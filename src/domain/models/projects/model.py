@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import date, datetime
 from typing import Optional, List
 
 from sqlalchemy import ForeignKey, String, Text, Enum
@@ -16,11 +16,11 @@ class ProjectModel(Base):
     name: Mapped[str] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(Text)
     status: Mapped[ProjectStatusEnum] = mapped_column(Enum(ProjectStatusEnum))
-    start_date: Mapped[Optional[datetime]] = mapped_column(default=datetime.now(UTC))
-    end_date: Mapped[Optional[datetime]]
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    start_date: Mapped[Optional[date]] = mapped_column(default=date.today())
+    end_date: Mapped[Optional[date]]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(UTC), onupdate=datetime.now(UTC)
+        default=datetime.now(), onupdate=datetime.now()
     )
 
     user: Mapped["UserModel"] = relationship(back_populates="projects")

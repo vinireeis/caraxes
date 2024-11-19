@@ -1,6 +1,6 @@
-from datetime import datetime, UTC
+from datetime import date
 from typing import Optional
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from src.domain.enums.projects.enum import ProjectStatusEnum
 
 
@@ -9,21 +9,29 @@ class BaseProjectRequest(BaseModel):
     name: str
     status: ProjectStatusEnum
     description: Optional[str] = None
-    start_date: Optional[datetime] = None
-    end_date: Optional[datetime] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
 
-    @field_validator("end_date")
-    def validate_end_date(cls, end_date, values):
+    @model_validator(mode="before")
+    def validate_dates(cls, values):
         start_date = values.get("start_date")
-        if end_date and start_date and end_date <= start_date:
-            raise ValueError("end_date must be greater than start_date")
-        return end_date
+        end_date = values.get("end_date")
 
-    @field_validator("start_date")
-    def validate_start_date(cls, start_date: datetime | None) -> datetime | None:
-        if start_date and start_date < datetime.now(UTC):
+        if isinstance(start_date, str):
+            start_date = date.fromisoformat(start_date)
+        if isinstance(end_date, str):
+            end_date = date.fromisoformat(end_date)
+
+        values["start_date"] = start_date
+        values["end_date"] = end_date
+
+        if start_date and end_date and end_date <= start_date:
+            raise ValueError("end_date must be greater than start_date")
+
+        if start_date and start_date < date.today():
             raise ValueError("Start date cannot be in the past")
-        return start_date
+
+        return values
 
     @field_validator("name")
     def validate_name(cls, name: str) -> str:

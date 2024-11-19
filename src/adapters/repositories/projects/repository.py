@@ -1,5 +1,5 @@
 from loguru import logger
-from sqlalchemy import select, func, insert, delete
+from sqlalchemy import select, func, delete
 from sqlalchemy.exc import NoResultFound
 
 from src import ProjectModel
@@ -22,14 +22,10 @@ class ProjectRepository:
         cls, project_request: NewProjectRequest
     ) -> ProjectModel:
         async with cls.postgres_infrastructure.get_session() as session:
-            project_dict = project_request.model_dump()
-            statement = (
-                insert(ProjectModel).values(project_dict).returning(ProjectModel)
-            )
-            db_result = await session.execute(statement)
-
+            new_project_model = ProjectModel(**project_request.model_dump())
+            session.add(new_project_model)
             await session.commit()
-            new_project_model = db_result.fetchone()
+            await session.refresh(new_project_model)
 
             return new_project_model
 

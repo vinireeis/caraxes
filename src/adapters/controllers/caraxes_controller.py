@@ -139,7 +139,7 @@ class CaraxesController:
 
         response = DeleteUserResponse(
             success=True,
-            status_code=HTTPStatus.NO_CONTENT,
+            status_code=HTTPStatus.OK,
         )
 
         return response
@@ -221,7 +221,7 @@ class CaraxesController:
         await ProjectService.delete_project_by_id(project_id=project_id)
         response = DeleteProjectResponse(
             success=True,
-            status_code=HTTPStatus.NO_CONTENT,
+            status_code=HTTPStatus.OK,
         )
         return response
 
@@ -334,6 +334,6 @@ class CaraxesController:
         await TaskService.delete_task(project_id=project_id, task_id=task_id)
         response = DeleteTaskResponse(
             success=True,
-            status_code=HTTPStatus.NO_CONTENT,
+            status_code=HTTPStatus.OK,
         )
         return response

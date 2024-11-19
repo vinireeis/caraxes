@@ -1,5 +1,5 @@
 from loguru import logger
-from sqlalchemy import select, func, insert, delete
+from sqlalchemy import select, func, delete
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from src import UserModel

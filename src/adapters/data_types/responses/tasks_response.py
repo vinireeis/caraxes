@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import BaseModel, Field
 
@@ -13,7 +13,7 @@ class TaskPayload(BaseModel):
     description: str | None
     status: TaskStatusEnum
     priority: TaskPriorityEnum
-    deadline: datetime | None
+    deadline: date | None
     assigned_users: list[int]
     created_at: datetime
     updated_at: datetime

@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime, date
 from typing import List, Optional
 
 from sqlalchemy import ForeignKey, String, Text, Enum
@@ -19,10 +19,10 @@ class TaskModel(Base):
     priority: Mapped[str] = mapped_column(
         Enum(TaskPriorityEnum), default=TaskPriorityEnum.MEDIUM
     )
-    deadline: Mapped[Optional[datetime]]
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    deadline: Mapped[Optional[date]]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(UTC), onupdate=datetime.now(UTC)
+        default=datetime.now(), onupdate=datetime.now()
     )
 
     project: Mapped["ProjectModel"] = relationship(back_populates="tasks")
@@ -37,4 +37,4 @@ class TaskAssignmentModel(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    assigned_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    assigned_at: Mapped[datetime] = mapped_column(default=datetime.now())

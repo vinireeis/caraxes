@@ -17,7 +17,7 @@ class ProjectService:
 
     @classmethod
     async def create_new_project(cls, request: NewProjectRequest) -> ProjectModel:
-        await cls.verify_user_exists(user_id=request.user.id)
+        await cls.verify_user_exists(user_id=request.user_id)
 
         new_project_model = await cls._project_repository.insert_one_project(
             project_request=request
@@ -51,7 +51,7 @@ class ProjectService:
 
     @classmethod
     async def update_project(cls, project_id: int, request: UpdateProjectRequest):
-        await cls.verify_user_exists(user_id=request.user.id)
+        await cls.verify_user_exists(user_id=request.user_id)
         await cls._project_repository.update_project(
             project_id=project_id, project_request=request
         )

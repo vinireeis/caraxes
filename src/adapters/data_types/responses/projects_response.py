@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from pydantic import BaseModel, Field
 
@@ -12,8 +12,8 @@ class ProjectPayload(BaseModel):
     name: str
     status: ProjectStatusEnum
     description: str | None
-    start_date: datetime | None
-    end_date: datetime | None
+    start_date: date | None
+    end_date: date | None
 
 
 class ProjectsPaginatedPayload(BaseModel):
