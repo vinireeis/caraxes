@@ -1,4 +1,4 @@
-import loglifos
+from loguru import logger
 from sqlalchemy import select, func, insert, delete
 from sqlalchemy.exc import NoResultFound
 
@@ -70,7 +70,7 @@ class TaskRepository:
                 task = db_result.scalar_one()
                 return task
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise TaskNotFoundError(task_id)
 
     async def update_task(
@@ -91,7 +91,7 @@ class TaskRepository:
                 await session.commit()
                 return task
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise TaskNotFoundError(task_id)
 
     async def update_task_status(
@@ -109,7 +109,7 @@ class TaskRepository:
                 await session.commit()
                 return task
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise TaskNotFoundError(task_id)
 
     async def delete_one_task_by_id(self, project_id: int, task_id: int) -> None:

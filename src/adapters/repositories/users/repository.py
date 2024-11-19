@@ -1,4 +1,4 @@
-import loglifos
+from loguru import logger
 from sqlalchemy import select, func, insert, delete
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
@@ -32,7 +32,7 @@ class UserRepository:
                 return new_user_model
 
         except IntegrityError as ex:
-            loglifos.info(exception=ex, msg=str(ex))
+            logger.info(ex.orig.__str__())
             raise EmailAlreadyExists()
 
     @classmethod
@@ -58,7 +58,7 @@ class UserRepository:
                 return user
 
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise UserNotFoundError(user_id)
 
     async def update_user(
@@ -78,11 +78,11 @@ class UserRepository:
                 return user
 
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise UserNotFoundError(user_id)
 
             except IntegrityError as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise EmailAlreadyExists()
 
     async def delete_one_user_by_id(self, user_id: int) -> None:

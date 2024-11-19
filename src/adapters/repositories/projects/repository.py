@@ -1,4 +1,4 @@
-import loglifos
+from loguru import logger
 from sqlalchemy import select, func, insert, delete
 from sqlalchemy.exc import NoResultFound
 
@@ -65,7 +65,7 @@ class ProjectRepository:
                 return project
 
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise ProjectNotFoundError(project_id)
 
     async def update_project(
@@ -85,7 +85,7 @@ class ProjectRepository:
                 return project
 
             except NoResultFound as ex:
-                loglifos.info(exception=ex, msg=str(ex))
+                logger.info(ex)
                 raise ProjectNotFoundError(project_id)
 
     async def delete_one_project_by_id(self, project_id: int) -> None:
