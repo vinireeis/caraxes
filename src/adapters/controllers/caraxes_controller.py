@@ -64,7 +64,7 @@ class CaraxesController:
 
         response = NewUserResponse(
             payload=UserIdPayload(id=new_user_model.id),
-            sucess=True,
+            success=True,
             message="User registered successfully.",
             status_code=HTTPStatus.CREATED,
         )
@@ -82,7 +82,7 @@ class CaraxesController:
                 email=user_model.email,
                 role=user_model.role if user_model.role else None,
             ),
-            sucess=True,
+            success=True,
             status_code=HTTPStatus.OK,
         )
 
@@ -113,7 +113,7 @@ class CaraxesController:
                 limit=users_paginated_result.get("limit"),
                 offset=users_paginated_result.get("offset"),
             ),
-            sucess=True,
+            success=True,
             status_code=HTTPStatus.OK,
         )
 
@@ -138,7 +138,7 @@ class CaraxesController:
         await UserService.delete_user_by_id(user_id=user_id)
 
         response = DeleteUserResponse(
-            sucess=True,
+            success=True,
             status_code=HTTPStatus.NO_CONTENT,
         )
 

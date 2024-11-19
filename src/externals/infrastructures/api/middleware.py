@@ -51,19 +51,19 @@ class Middleware:
                 internal_code=ex.internal_code,
             )
             response = JSONResponse(
-                status_code=ex.status_code, content=error_response.model_dump()
+                status_code=ex.status_code, content=error_response.model_dump(exclude_none=True)
             )
 
         except ValidationError as ex:
-            logger.info(ex.msg)
+            logger.info(ex)
             error_response = ErrorResponse(
                 success=False,
-                internal_code=InternalCodeEnum.DATA_VALIDATION_ERROR,
+                internal_code=InternalCodeEnum.DATA_CONVERTER_ERROR,
                 message=str(ex),
             )
             response = JSONResponse(
-                status_code=HTTPStatus.BAD_REQUEST,
-                content=error_response.model_dump(),
+                status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+                content=error_response.model_dump(exclude_none=True),
             )
 
         except Exception as ex:
@@ -71,10 +71,11 @@ class Middleware:
             error_response = ErrorResponse(
                 success=False,
                 internal_code=InternalCodeEnum.INTERNAL_SERVER_ERROR,
+                message="Unexpected error has occurred"
             )
             response = JSONResponse(
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-                content=error_response.model_dump(),
+                content=error_response.model_dump(exclude_none=True),
             )
 
         finally:

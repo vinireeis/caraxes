@@ -9,7 +9,7 @@ from src.domain.models.orm_base.model import Base
 class UserModel(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(100), unique=True)
     role: Mapped[Optional[str]] = mapped_column(String(20))

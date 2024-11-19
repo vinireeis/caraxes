@@ -25,7 +25,7 @@ class TasksRouter:
         return TasksRouter.__router
 
     @staticmethod
-    @__router.get(path="/projects/tasks", response_model=TasksPaginatedResponse)
+    @__router.get(path="/projects/tasks", response_model=TasksPaginatedResponse, response_model_exclude_none=True)
     async def get_tasks_paginated(
         limit: int = Query(default=10, ge=1),
         offset: int = Query(default=0, ge=0),
@@ -40,7 +40,7 @@ class TasksRouter:
 
     @staticmethod
     @__router.get(
-        path="/projects/{project_id}/tasks/{task_id}", response_model=GetOneTaskResponse
+        path="/projects/{project_id}/tasks/{task_id}", response_model=GetOneTaskResponse, response_model_exclude_none=True
     )
     async def get_one_task(project_id: int, task_id: int) -> GetOneTaskResponse:
         response = await CaraxesController.get_task_by_id(
@@ -50,7 +50,7 @@ class TasksRouter:
         return response
 
     @staticmethod
-    @__router.post(path="/projects/{project_id}/tasks", response_model=NewTaskResponse)
+    @__router.post(path="/projects/{project_id}/tasks", response_model=NewTaskResponse, response_model_exclude_none=True)
     async def create_new_task(
         project_id: int, request: NewTaskRequest
     ) -> NewTaskResponse:
@@ -62,7 +62,7 @@ class TasksRouter:
 
     @staticmethod
     @__router.put(
-        path="/projects/{project_id}/tasks/{task_id}", response_model=UpdateTaskResponse
+        path="/projects/{project_id}/tasks/{task_id}", response_model=UpdateTaskResponse, response_model_exclude_none=True
     )
     async def update_task(
         project_id: int, task_id: int, request: UpdateTaskRequest
@@ -76,7 +76,7 @@ class TasksRouter:
     @staticmethod
     @__router.patch(
         path="/projects/{project_id}/tasks/{task_id}/status",
-        response_model=UpdateTaskStatusResponse,
+        response_model=UpdateTaskStatusResponse, response_model_exclude_none=True,
     )
     async def update_task_status(
         project_id: int, task_id: int, request: UpdateTaskStatusRequest
@@ -89,7 +89,7 @@ class TasksRouter:
 
     @staticmethod
     @__router.delete(
-        path="/projects/{project_id}/tasks/{task_id}", response_model=DeleteTaskResponse
+        path="/projects/{project_id}/tasks/{task_id}", response_model=DeleteTaskResponse, response_model_exclude_none=True
     )
     async def delete_task(project_id: int, task_id: int) -> DeleteTaskResponse:
         response = await CaraxesController.delete_task(

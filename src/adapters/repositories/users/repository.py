@@ -22,12 +22,10 @@ class UserRepository:
     async def insert_one_user(cls, user_request: NewUserRequest) -> UserModel:
         try:
             async with cls.postgres_infrastructure.get_session() as session:
-                user_dict = user_request.model_dump()
-                statement = insert(UserModel).values(user_dict).returning(UserModel)
-                db_result = await session.execute(statement)
-
+                new_user_model = UserModel(**user_request.model_dump())
+                session.add(new_user_model)
                 await session.commit()
-                new_user_model = db_result.fetchone()
+                await session.refresh(new_user_model)
 
                 return new_user_model
 
