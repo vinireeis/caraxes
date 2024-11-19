@@ -13,9 +13,9 @@ alembic = "^1.14.0"
 uvicorn = "^0.32.0"
 sqlalchemy = "^2.0.36"
 python-decouple = "^3.8"
-loglifos = "^0.2.1"
 pyfiglet = "^1.0.2"
 pydantic = {extras = ["email"], version = "^2.9.2"}
+loguru = "^0.7.2"
 
 
 [tool.poetry.group.dev.dependencies]
