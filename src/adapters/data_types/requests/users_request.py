@@ -12,7 +12,7 @@ class BaseUserRequest(BaseModel):
     def validate_name(cls, name: str) -> str:
         name = name.strip()
         if len(name) < 2:
-            raise ValidationError("Name must have at least 2 characters")
+            raise ValueError("Name must have at least 2 characters")
         return name
 
 

@@ -13,9 +13,9 @@ class UserModel(Base):
     name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(100), unique=True)
     role: Mapped[Optional[str]] = mapped_column(String(20))
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(UTC), onupdate=datetime.now(UTC)
+        default=datetime.now(), onupdate=datetime.now()
     )
 
     projects: Mapped[List["ProjectModel"]] = relationship(back_populates="user")

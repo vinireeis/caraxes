@@ -6,6 +6,6 @@ from src.domain.enums.http_response.enum import InternalCodeEnum
 
 class BaseResponse(BaseModel):
     success: bool = False
-    internal_code: InternalCodeEnum
+    internal_code: InternalCodeEnum = InternalCodeEnum.SUCCESS
     message: str = None
     status_code: HTTPStatus = None

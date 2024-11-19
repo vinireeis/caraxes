@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, field_validator
 from datetime import datetime, UTC
 from src.domain.enums.tasks.enum import TaskStatusEnum, TaskPriorityEnum
 
@@ -14,7 +14,7 @@ class BaseTaskRequest(BaseModel):
     @field_validator("deadline")
     def validate_deadline(cls, deadline: datetime | None) -> datetime | None:
         if deadline and deadline < datetime.now(UTC):
-            raise ValidationError("Deadline cannot be in the past")
+            raise ValueError("Deadline cannot be in the past")
         return deadline
 
 
