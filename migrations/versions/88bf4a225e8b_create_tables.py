@@ -1,8 +1,8 @@
-"""Create tables
+"""create tables
 
-Revision ID: a7992299b7e5
+Revision ID: 88bf4a225e8b
 Revises: 
-Create Date: 2024-11-19 13:34:59.487537
+Create Date: 2024-11-19 17:31:07.990217
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "a7992299b7e5"
+revision: str = "88bf4a225e8b"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -91,10 +91,7 @@ def upgrade() -> None:
         sa.Column("task_id", sa.Integer(), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("assigned_at", sa.DateTime(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["task_id"],
-            ["tasks.id"],
-        ),
+        sa.ForeignKeyConstraint(["task_id"], ["tasks.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
