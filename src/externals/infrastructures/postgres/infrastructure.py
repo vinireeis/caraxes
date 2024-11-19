@@ -1,15 +1,9 @@
+from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-import loglifos
 from decouple import config
 from sqlalchemy import AsyncAdaptedQueuePool
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-
-from src.domain.exceptions.infrastructure.exception import (
-    SqlAlchemyInfrastructureException,
-    UnexpectedInfrastructureException,
-)
 
 
 class PostgresInfrastructure:
@@ -24,13 +18,8 @@ class PostgresInfrastructure:
     )
 
     @classmethod
+    @asynccontextmanager
     async def get_session(cls) -> AsyncGenerator[AsyncSession, None]:
-        try:
-            async with cls.async_session() as session:
-                yield session
-        except SQLAlchemyError as ex:
-            loglifos.info(msg=str(ex))
-            raise SqlAlchemyInfrastructureException()
-        except Exception as ex:
-            loglifos.info(msg=str(ex))
-            raise UnexpectedInfrastructureException()
+        async with cls.async_session() as session:
+
+            yield session
