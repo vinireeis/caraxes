@@ -23,5 +23,7 @@ class ProjectModel(Base):
         default=datetime.now(), onupdate=datetime.now()
     )
 
-    user: Mapped["UserModel"] = relationship(back_populates="projects")
-    tasks: Mapped[List["TaskModel"]] = relationship(back_populates="project")
+    user: Mapped["UserModel"] = relationship(back_populates="projects", lazy="selectin")
+    tasks: Mapped[List["TaskModel"]] = relationship(
+        back_populates="project", lazy="selectin"
+    )

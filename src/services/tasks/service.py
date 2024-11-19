@@ -1,6 +1,6 @@
 from asyncio import gather
 
-from src import TaskModel
+from src import TaskModel, UserModel
 from src.adapters.data_types.requests.tasks_request import (
     NewTaskRequest,
     UpdateTaskRequest,
@@ -28,10 +28,15 @@ class TaskService:
         cls, project_id: int, request: NewTaskRequest
     ) -> TaskModel:
         await cls.validate_project_status_is_planning_or_active(project_id=project_id)
-        await cls.validate_users_assigned_ids_already_exists(request=request)
+        users_model = []
+
+        if request.assigned_users:
+            users_model = await cls.validate_users_assigned_ids_already_exists(
+                request=request
+            )
 
         new_task_model = await cls._task_repository.insert_one_task(
-            project_id=project_id, task_request=request
+            project_id=project_id, task_request=request, users_model=users_model
         )
 
         return new_task_model
@@ -66,7 +71,6 @@ class TaskService:
         request: UpdateTaskRequest,
     ):
         await cls.validate_project_status_is_planning_or_active(project_id=project_id)
-        await cls.validate_users_assigned_ids_already_exists(request=request)
 
         await cls._task_repository.update_task(
             project_id=project_id, task_id=task_id, task_request=request
@@ -112,14 +116,15 @@ class TaskService:
     @classmethod
     async def validate_users_assigned_ids_already_exists(
         cls, request: NewTaskRequest | UpdateTaskRequest
-    ):
+    ) -> list[UserModel]:
         try:
             tasks = [
                 cls._user_service.get_user_by_id(user_id=user_id)
-                for user_id in request.assigned_user_ids
+                for user_id in request.assigned_users
             ]
 
-            await gather(*tasks)
+            users_model = await gather(*tasks)
+            return users_model
 
         except UserNotFoundError:
             raise InvalidAssignedUserError()

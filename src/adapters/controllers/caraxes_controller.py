@@ -254,7 +254,7 @@ class CaraxesController:
                 status=task_model.status,
                 priority=task_model.priority,
                 deadline=task_model.deadline,
-                assigned_users=task_model.assigned_users,
+                assigned_users=[user.id for user in task_model.assigned_users],
                 created_at=task_model.created_at,
                 updated_at=task_model.updated_at,
             ),
@@ -283,7 +283,7 @@ class CaraxesController:
                 status=task.status,
                 priority=task.priority,
                 deadline=task.deadline,
-                assigned_users=task.assigned_users,
+                assigned_users=[user.id for user in task.assigned_users],
                 created_at=task.created_at,
                 updated_at=task.updated_at,
             )

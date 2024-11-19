@@ -1,5 +1,3 @@
-from http import HTTPStatus
-
 from decouple import config
 from fastapi import APIRouter, Query
 

@@ -33,8 +33,8 @@ class ApiInfrastructure:
     @classmethod
     def register_routers(cls, app: FastAPI):
         cls.__include_users_router(app=app)
-        cls.__include_projects_router(app=app)
         cls.__include_tasks_router(app=app)
+        cls.__include_projects_router(app=app)
 
     @staticmethod
     def __include_users_router(app: FastAPI):

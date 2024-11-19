@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
+
 from decouple import config
 from sqlalchemy import AsyncAdaptedQueuePool
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -21,5 +22,4 @@ class PostgresInfrastructure:
     @asynccontextmanager
     async def get_session(cls) -> AsyncGenerator[AsyncSession, None]:
         async with cls.async_session() as session:
-
             yield session

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from datetime import date
 from src.domain.enums.tasks.enum import TaskStatusEnum, TaskPriorityEnum
 
@@ -9,7 +9,12 @@ class BaseTaskRequest(BaseModel):
     status: TaskStatusEnum
     priority: TaskPriorityEnum = TaskPriorityEnum.MEDIUM
     deadline: date | None = None
-    assigned_users: list[int] = []
+
+    @model_validator(mode="before")
+    def check_unique_assigned_users(cls, values):
+        assigned_users = values.get("assigned_users", [])
+        values["assigned_users"] = list(set(assigned_users))
+        return values
 
     @field_validator("deadline")
     def validate_deadline(cls, deadline: date | None) -> date | None:
@@ -19,6 +24,7 @@ class BaseTaskRequest(BaseModel):
 
 
 class NewTaskRequest(BaseTaskRequest):
+    assigned_users: list[int] = []
     pass
 
 

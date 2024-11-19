@@ -27,7 +27,7 @@ class TaskModel(Base):
 
     project: Mapped["ProjectModel"] = relationship(back_populates="tasks")
     assigned_users: Mapped[List["UserModel"]] = relationship(
-        secondary="task_assignments", back_populates="tasks"
+        secondary="task_assignments", back_populates="tasks", cascade="all, delete"
     )
 
 
@@ -35,6 +35,6 @@ class TaskAssignmentModel(Base):
     __tablename__ = "task_assignments"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     assigned_at: Mapped[datetime] = mapped_column(default=datetime.now())
