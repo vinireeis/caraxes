@@ -13,4 +13,6 @@ RUN apt-get update && \
 
 COPY . .
 
+RUN poetry run pytest --asyncio-mode=auto --cov=.
+
 CMD ["python3", "main.py"]

@@ -91,13 +91,13 @@ async def test_when_update_project_then_repository_is_called_with_correct_argume
 
 @pytest.mark.asyncio
 async def test_when_create_new_project_then_verify_user_exists_is_called(
-    mock_project_repository, mock_user_exists
+    mock_project_repository, mock_user_service
 ):
     user_id = 10
 
     await ProjectService.verify_user_exists(user_id=user_id)
 
-    mock_user_exists.get_user_by_id.assert_called_once_with(user_id=user_id)
+    mock_user_service.get_user_by_id.assert_called_once_with(user_id=user_id)
 
 
 @pytest.mark.asyncio
