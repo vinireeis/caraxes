@@ -1,12 +1,9 @@
-from unittest.mock import patch, AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
 from src import ProjectModel
-from tests.src.services.stubs import (
-    task_model_stub,
-    paginated_tasks_stub,
-)
+from tests.src.services.stubs import paginated_tasks_stub, task_model_stub
 
 
 @pytest.fixture

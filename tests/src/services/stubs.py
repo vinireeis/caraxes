@@ -1,15 +1,14 @@
 from datetime import date
 
-from src.adapters.data_types.requests.tasks_request import (
-    UpdateTaskRequest,
-    NewTaskRequest,
-)
-from src.adapters.data_types.typed_dicts.tasks_typed_dict import PaginatedTasksTypedDict
-from src import ProjectModel, UserModel, TaskModel
-from src.adapters.data_types.typed_dicts.users_typed_dict import PaginatedUsersTypedDict
+from src import ProjectModel, TaskModel, UserModel
 from src.adapters.data_types.requests.projects_request import (
     NewProjectRequest,
     UpdateProjectRequest,
+)
+from src.adapters.data_types.requests.tasks_request import (
+    NewTaskRequest,
+    UpdateTaskRequest,
+    UpdateTaskStatusRequest,
 )
 from src.adapters.data_types.requests.users_request import (
     NewUserRequest,
@@ -18,54 +17,25 @@ from src.adapters.data_types.requests.users_request import (
 from src.adapters.data_types.typed_dicts.projects_typed_dict import (
     PaginatedProjectsTypedDict,
 )
+from src.adapters.data_types.typed_dicts.tasks_typed_dict import PaginatedTasksTypedDict
+from src.adapters.data_types.typed_dicts.users_typed_dict import PaginatedUsersTypedDict
 from src.domain.enums.projects.enum import ProjectStatusEnum
+from src.domain.enums.tasks.enum import TaskStatusEnum, TaskPriorityEnum
 
 user_model_stub = UserModel(
     id=10, name="John Doe", email="test@example.com", role="dev"
 )
 
-project_model_stub = ProjectModel(id=15, name="Test Project")
+updated_user_model_stub = UserModel(
+    id=10, name="Updated John Doe", email="updated@example.com", role="manager"
+)
+
+project_model_stub = ProjectModel(
+    id=15, name="Test Project", status=ProjectStatusEnum.PLANNING
+)
 
 project_model_with_status_stub = ProjectModel(
-    id=1, name="Test Project", status=ProjectStatusEnum.CANCELLED
-)
-
-new_user_request_stub = NewUserRequest(
-    name="Test User", email="test@example.com", role="dev"
-)
-
-update_user_request_stub = UpdateUserRequest(
-    name="Updated User", email="updated@example.com", role="manager"
-)
-
-updated_user_model_stub = UserModel(
-    id=10, name="Updated User", email="updated@example.com", role="manager"
-)
-
-user_paginated_result_stub = PaginatedUsersTypedDict(
-    users=[user_model_stub], total=1, limit=10, offset=0
-)
-
-new_project_request_stub = NewProjectRequest(
-    user_id=1,
-    name="New Project",
-    description="Test description",
-    status=ProjectStatusEnum.PLANNING,
-    priority="HIGH",
-    deadline="2024-12-31",
-)
-
-update_project_request_stub = UpdateProjectRequest(
-    user_id=1,
-    name="Updated Project",
-    description="Updated description",
-    status=ProjectStatusEnum.PLANNING,
-    priority="HIGH",
-    deadline="2024-12-31",
-)
-
-paginated_projects_stub = PaginatedProjectsTypedDict(
-    projects=[ProjectModel(id=1, name="Test Project")], total=1, limit=10, offset=0
+    id=1, name="Project with Status", status=ProjectStatusEnum.CANCELLED
 )
 
 task_model_stub = TaskModel(
@@ -78,28 +48,68 @@ task_model_stub = TaskModel(
     deadline=date.fromisoformat("2024-12-31"),
 )
 
+new_project_request_stub = NewProjectRequest(
+    user_id=1,
+    name="New Project",
+    description="Test Project Description",
+    status=ProjectStatusEnum.PLANNING,
+    priority="HIGH",
+    deadline="2025-12-31",
+)
+
+update_project_request_stub = UpdateProjectRequest(
+    user_id=1,
+    name="Updated Project",
+    description="Updated Project Description",
+    status=ProjectStatusEnum.ACTIVE,
+    priority="MEDIUM",
+    deadline="2025-01-31",
+)
+
+new_user_request_stub = NewUserRequest(
+    name="New User", email="newuser@example.com", role="dev"
+)
+
+update_user_request_stub = UpdateUserRequest(
+    name="Updated User", email="updateduser@example.com", role="manager"
+)
+
 new_task_request_stub = NewTaskRequest(
     name="New Task",
     description="New task description",
     status="TODO",
-    priority="HIGH",
-    deadline="2024-12-31",
-    assigned_users=[1, 2],  # Assigning users with IDs
+    priority="MEDIUM",
+    deadline="2025-01-31",
+    assigned_users=[1, 2],
 )
 
 update_task_request_stub = UpdateTaskRequest(
     name="Updated Task",
     description="Updated task description",
-    status="IN_PROGRESS",
-    priority="MEDIUM",
-    deadline="2025-01-31",
-    assigned_users=[1],
+    status=TaskStatusEnum.IN_PROGRESS,
+    priority=TaskPriorityEnum.LOW,
+    deadline=date(2025, 3, 15),
 )
 
-paginated_tasks_stub = PaginatedTasksTypedDict(
-    tasks=[task_model_stub], total=1, limit=10, offset=0
-)
+update_task_status_request_stub = UpdateTaskStatusRequest(status=TaskStatusEnum.DONE)
 
-paginated_tasks_typed_dict_stub = PaginatedTasksTypedDict(
-    tasks=[task_model_stub], total=1, limit=10, offset=0
-)
+paginated_tasks_stub: PaginatedTasksTypedDict = {
+    "tasks": [task_model_stub],
+    "total": 1,
+    "limit": 10,
+    "offset": 0,
+}
+
+paginated_projects_stub: PaginatedProjectsTypedDict = {
+    "projects": [project_model_stub],
+    "total": 1,
+    "limit": 10,
+    "offset": 0,
+}
+
+user_paginated_result_stub: PaginatedUsersTypedDict = {
+    "users": [user_model_stub],
+    "total": 1,
+    "limit": 10,
+    "offset": 0,
+}

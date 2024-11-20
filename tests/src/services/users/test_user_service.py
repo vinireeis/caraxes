@@ -3,7 +3,6 @@ from unittest.mock import patch
 import pytest
 
 from src import UserModel
-from src.adapters.data_types.typed_dicts.users_typed_dict import PaginatedUsersTypedDict
 from src.services.users.service import UserService
 from tests.src.services.stubs import (
     user_model_stub,
