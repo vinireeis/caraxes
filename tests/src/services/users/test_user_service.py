@@ -87,7 +87,7 @@ async def test_when_delete_user_by_id_then_repository_is_called(mock_delete_user
     return_value=updated_user_model_stub,
 )
 async def test_when_update_user_by_id_successfully_then_return_none(
-    mock_user_repository,
+    mock_update_user, mock_insert_user
 ):
     success_result = await UserService.update_user_by_id(
         user_id=10, request=update_user_request_stub

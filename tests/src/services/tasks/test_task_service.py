@@ -96,7 +96,9 @@ async def test_when_validate_project_status_is_canceled_then_raises(
     project_id = 1
 
     with pytest.raises(InvalidProjectStatusForTaskCreationError):
-        await TaskService.validate_project_status_is_planning_or_active(project_id)
+        await TaskService.validate_project_status_is_planning_or_active(
+            project_id=project_id
+        )
 
 
 @pytest.mark.asyncio
@@ -111,7 +113,9 @@ async def test_when_validate_project_status_is_paused_then_raises(
     project_id = 1
 
     with pytest.raises(InvalidProjectStatusForTaskCreationError):
-        await TaskService.validate_project_status_is_planning_or_active(project_id)
+        await TaskService.validate_project_status_is_planning_or_active(
+            project_id=project_id
+        )
 
 
 @pytest.mark.asyncio
@@ -126,7 +130,9 @@ async def test_when_validate_project_status_is_completed_then_raises(
     project_id = 1
 
     with pytest.raises(InvalidProjectStatusForTaskCreationError):
-        await TaskService.validate_project_status_is_planning_or_active(project_id)
+        await TaskService.validate_project_status_is_planning_or_active(
+            project_id=project_id
+        )
 
 
 @pytest.mark.asyncio
@@ -264,8 +270,8 @@ async def test_when_create_new_task_then_task_is_created_with_correct_arguments(
         project_id=project_id, task_request=new_task_request_stub, users_model=[]
     )
 
-    assert new_task == task_model_stub
     assert isinstance(new_task, TaskModel)
+    assert new_task == task_model_stub
 
 
 @pytest.mark.asyncio
@@ -302,5 +308,5 @@ async def test_when_create_new_task_with_assigned_users_then_users_are_validated
         users_model=[user_model_stub],
     )
 
-    assert new_task == task_model_stub
     assert isinstance(new_task, TaskModel)
+    assert new_task == task_model_stub
