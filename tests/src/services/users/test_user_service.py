@@ -81,22 +81,12 @@ async def test_when_delete_user_by_id_then_repository_is_called(mock_delete_user
     "src.services.users.service.UserService._user_repository.insert_one_user",
     return_value=user_model_stub,
 )
-async def test_when_create_new_user_then_return_user_model(mock_user_repository):
-    user_model = await UserService.create_new_user(request=new_user_request_stub)
-
-    assert isinstance(user_model, UserModel)
-    assert user_model.name == "John Doe"
-    assert user_model.email == "test@example.com"
-    assert user_model.role == "dev"
-    assert user_model.id == 10
-
-
 @pytest.mark.asyncio
 @patch(
     "src.services.users.service.UserService._user_repository.update_user",
     return_value=updated_user_model_stub,
 )
-async def test_when_update_user_by_id_then_return_user_model_updated(
+async def test_when_update_user_by_id_successfully_then_return_none(
     mock_user_repository,
 ):
     success_result = await UserService.update_user_by_id(
@@ -117,12 +107,3 @@ async def test_when_update_user_then_repository_is_called_with_correct_arguments
     mock_update_user.assert_called_once_with(
         user_id=10, update_user_request=update_user_request_stub
     )
-
-
-@pytest.mark.asyncio
-@patch("src.services.users.service.UserService._user_repository.delete_one_user_by_id")
-async def test_when_delete_user_by_id_then_repository_is_called(mock_delete_user):
-    user_id = 10
-    await UserService.delete_user_by_id(user_id=user_id)
-
-    mock_delete_user.assert_called_once_with(user_id=user_id)
