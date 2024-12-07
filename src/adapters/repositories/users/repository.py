@@ -10,7 +10,7 @@ from src.adapters.data_types.requests.users_request import (
 from src.adapters.data_types.typed_dicts.users_typed_dict import PaginatedUsersTypedDict
 from src.domain.exceptions.repository.exception import (
     UserNotFoundError,
-    EmailAlreadyExists,
+    EmailAlreadyExists, UnexpectedRepositoryError,
 )
 from src.externals.infrastructures.postgres.infrastructure import PostgresInfrastructure
 
@@ -36,16 +36,20 @@ class UserRepository:
     @classmethod
     async def get_users_paginated(cls, limit=10, offset=0) -> PaginatedUsersTypedDict:
         async with cls.postgres_infrastructure.get_session() as session:
-            statement = select(UserModel).limit(limit).offset(offset)
-            db_result = await session.execute(statement)
-            users_model = db_result.scalars().all()
+            try:
+                statement = select(UserModel).limit(limit).offset(offset)
+                db_result = await session.execute(statement)
+                users_model = db_result.scalars().all()
 
-            total_users = await session.execute(select(func.count(UserModel.id)))
-            total_count = total_users.scalar()
+                total_users = await session.execute(select(func.count(UserModel.id)))
+                total_count = total_users.scalar()
 
-            return PaginatedUsersTypedDict(
-                users=users_model, total=total_count, limit=limit, offset=offset
-            )
+                return PaginatedUsersTypedDict(
+                    users=users_model, total=total_count, limit=limit, offset=offset
+                )
+            except Exception as ex:
+                logger.info(ex)
+                raise UnexpectedRepositoryError()
 
     async def get_one_user_by_id(self, user_id: int) -> UserModel:
         async with self.postgres_infrastructure.get_session() as session:

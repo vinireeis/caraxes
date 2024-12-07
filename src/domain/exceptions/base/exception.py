@@ -15,7 +15,7 @@ class BaseCustomException(Exception):
         self.status_code = status_code
         self.internal_code = internal_code
         self.success = success
-        super().__init__(msg, *args)
+        super().__init__(*args)
 
 
 class DomainException(BaseCustomException):

@@ -66,3 +66,18 @@ class TaskNotFoundError(RepositoryException):
             *args,
             **kwargs,
         )
+
+class UnexpectedRepositoryError(RepositoryException):
+    def __init__(self, *args, **kwargs):
+        self.msg = f"An unexpected error occurred while trying to use the repository."
+        self.status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+        self.internal_code = InternalCodeEnum.INTERNAL_SERVER_ERROR
+        self.success = False
+        super().__init__(
+            self.msg,
+            self.status_code,
+            self.internal_code,
+            self.success,
+            *args,
+            **kwargs,
+        )
